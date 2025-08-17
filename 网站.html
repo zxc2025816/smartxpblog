@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart_XP的博客</title>
+    
+    <script>
+        // 配置Tailwind自定义颜色
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#10b981',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.3);
+            }
+            .form-input-focus {
+                @apply focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-dark to-slate-900 text-light min-h-screen font-sans transition-opacity duration-500 opacity-0">
+    <!-- 导航栏 -->
+    <header class="sticky top-0 z-50 bg-slate-800/80 backdrop-blur-md border-b border-slate-700">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center max-w-5xl">
+            <a href="#" class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">
+                Smart_XP的博客
+            </a>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="#" class="text-slate-300 hover:text-primary transition-colors"><i class="fa fa-home mr-1"></i>首页</a></li>
+                    <li><a href="#" class="text-slate-300 hover:text-primary transition-colors"><i class="fa fa-user mr-1"></i>关于</a></li>
+                    <li><a href="#" class="text-slate-300 hover:text-primary transition-colors"><i class="fa fa-envelope mr-1"></i>联系</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- 博客头部区域 -->
+        <div class="text-center mb-12 pt-6">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-4 text-shadow">
+                Welcome to Smart_XP的博客
+            </h1>
+            <div class="inline-block relative">
+                <marquee class="text-lg md:text-xl font-medium text-yellow-300 py-2" behavior="alternate" scrollamount="6">
+                    三连加关注求求了！
+                </marquee>
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-30"></div>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- 主内容区 -->
+            <main class="flex-1">
+                <!-- 登录状态显示 -->
+                <div id="userStatus" class="hidden mb-8 bg-slate-800/70 backdrop-blur-sm rounded-2xl p-6 border border-slate-700">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p class="text-xl text-slate-300">欢迎回来，<span id="usernameDisplay" class="text-primary font-semibold"></span>！</p>
+                        <button id="logoutBtn" class="inline-flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-medium py-2 px-6 rounded-full transition-all duration-300">
+                            <i class="fa fa-sign-out"></i>
+                            退出登录
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 登录注册卡片 -->
+                <div id="authCard" class="bg-slate-800/70 backdrop-blur-sm rounded-2xl p-6 md:p-8 w-full max-w-md mx-auto card-hover border border-slate-700 mb-8">
+                    <!-- 切换标签 -->
+                    <div class="flex mb-6 border-b border-slate-700">
+                        <button id="loginTab" class="flex-1 py-3 text-primary font-medium border-b-2 border-primary">
+                            <i class="fa fa-sign-in mr-2"></i>登录
+                        </button>
+                        <button id="registerTab" class="flex-1 py-3 text-slate-400 font-medium hover:text-slate-300">
+                            <i class="fa fa-user-plus mr-2"></i>注册
+                        </button>
+                    </div>
+
+                    <!-- 登录表单 -->
+                    <div id="loginForm">
+                        <div class="mb-4">
+                            <label for="loginUsername" class="block text-sm text-slate-400 mb-1">用户名</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                                <input type="text" id="loginUsername" class="w-full pl-10 pr-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-light form-input-focus" placeholder="请输入用户名">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="loginPassword" class="block text-sm text-slate-400 mb-1">密码</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                                <input type="password" id="loginPassword" class="w-full pl-10 pr-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-light form-input-focus" placeholder="请输入密码">
+                            </div>
+                        </div>
+                        
+                        <button id="loginBtn" class="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-purple-600 hover:to-primary text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-primary/40">
+                            登录
+                        </button>
+                        
+                        <p id="loginError" class="mt-3 text-red-500 text-sm text-center hidden">用户名或密码错误</p>
+                    </div>
+
+                    <!-- 注册表单 (默认隐藏) -->
+                    <div id="registerForm" class="hidden">
+                        <div class="mb-4">
+                            <label for="regUsername" class="block text-sm text-slate-400 mb-1">用户名</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                                    <i class="fa fa-user"></i>
+                                </span>
+                                <input type="text" id="regUsername" class="w-full pl-10 pr-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-light form-input-focus" placeholder="请设置用户名">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="regPassword" class="block text-sm text-slate-400 mb-1">密码</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                                <input type="password" id="regPassword" class="w-full pl-10 pr-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-light form-input-focus" placeholder="请设置密码">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="regConfirmPassword" class="block text-sm text-slate-400 mb-1">确认密码</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                                <input type="password" id="regConfirmPassword" class="w-full pl-10 pr-3 py-2 rounded-lg bg-slate-700/50 border border-slate-600 text-light form-input-focus" placeholder="请再次输入密码">
+                            </div>
+                        </div>
+                        
+                        <button id="registerBtn" class="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-purple-600 hover:to-primary text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-primary/40">
+                            注册
+                        </button>
+                        
+                        <p id="regSuccess" class="mt-3 text-green-500 text-sm text-center hidden">注册成功，请登录</p>
+                        <p id="regError" class="mt-3 text-red-500 text-sm text-center hidden">两次密码输入不一致</p>
+                        <p id="userExists" class="mt-3 text-red-500 text-sm text-center hidden">用户名已存在</p>
+                    </div>
+                </div>
+
+                <!-- 关注按钮 (登录后显示) -->
+                <div id="followCard" class="hidden mt-8 bg-slate-800/70 backdrop-blur-sm rounded-2xl p-6 md:p-8 w-full card-hover border border-slate-700 text-center">
+                    <div class="mb-6">
+                        <i class="fa fa-heart text-secondary text-4xl mb-4 animate-pulse"></i>
+                        <p class="text-xl text-slate-300 mb-2">关注呀！！！求求了</p>
+                        <p class="text-slate-400">这是我的网页，感谢您的访问~</p>
+                    </div>
+                    
+                    <a href="https://space.bilibili.com/3546782629890214?spm_id_from=333.1007.0.0L" 
+                       class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-purple-600 hover:from-purple-600 hover:to-primary text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 w-full md:w-auto shadow-lg shadow-primary/20 hover:shadow-primary/40">
+                        <i class="fa fa-user-plus"></i>
+                        点击跳转关注
+                    </a>
+                </div>
+
+                <!-- 博客文章预览区 -->
+                <section class="mt-12">
+                    <h2 class="text-2xl font-bold mb-6 pb-2 border-b border-slate-700">最新内容</h2>
+                    
+                    <div class="space-y-6">
+                        <!-- 文章卡片 1 -->
+                        <article class="bg-slate-800/50 rounded-xl overflow-hidden card-hover border border-slate-700">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2 hover:text-primary transition-colors">
+                                    <a href="#">欢迎来到我的个人博客</a>
+                                </h3>
+                                <p class="text-slate-400 mb-4">这是我的个人网站，记录一些日常和学习心得，感谢您的访问和支持！</p>
+                                <div class="flex justify-between items-center text-sm text-slate-500">
+                                    <span><i class="fa fa-calendar mr-1"></i> 2023-10-01</span>
+                                    <span><i class="fa fa-eye mr-1"></i> 128</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <!-- 文章卡片 2 -->
+                        <article class="bg-slate-800/50 rounded-xl overflow-hidden card-hover border border-slate-700">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2 hover:text-primary transition-colors">
+                                    <a href="#">未来内容预告</a>
+                                </h3>
+                                <p class="text-slate-400 mb-4">后续会在这里分享更多有趣的内容，敬请期待。记得关注我哦！</p>
+                                <div class="flex justify-between items-center text-sm text-slate-500">
+                                    <span><i class="fa fa-calendar mr-1"></i> 2023-10-05</span>
+                                    <span><i class="fa fa-eye mr-1"></i> 96</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+            </main>
+
+            <!-- 侧边栏 -->
+            <aside class="w-full lg:w-64 space-y-8">
+                <!-- 关于博主 -->
+                <div class="bg-slate-800/70 backdrop-blur-sm rounded-2xl p-6 border border-slate-700">
+                    <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-slate-700">关于我</h3>
+                    <div class="text-center">
+                        <div class="w-24 h-24 rounded-full bg-primary/20 mx-auto mb-4 flex items-center justify-center">
+                            <i class="fa fa-user text-4xl text-primary"></i>
+                        </div>
+                        <p class="text-slate-300 font-medium">Smart_XP</p>
+                        <p class="text-slate-400 text-sm mt-2">热爱分享的博主</p>
+                        <div class="flex justify-center gap-4 mt-4">
+                            <a href="#" class="text-slate-400 hover:text-primary transition-colors"><i class="fa fa-weibo text-xl"></i></a>
+                            <a href="#" class="text-slate-400 hover:text-primary transition-colors"><i class="fa fa-github text-xl"></i></a>
+                            <a href="#" class="text-slate-400 hover:text-primary transition-colors"><i class="fa fa-bilibili text-xl"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 标签云 -->
+                <div class="bg-slate-800/70 backdrop-blur-sm rounded-2xl p-6 border border-slate-700">
+                    <h3 class="text-lg font-semibold mb-4 pb-2 border-b border-slate-700">标签</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <a href="#" class="px-3 py-1 bg-slate-700/50 hover:bg-primary/20 rounded-full text-sm transition-colors">日常</a>
+                        <a href="#" class="px-3 py-1 bg-slate-700/50 hover:bg-primary/20 rounded-full text-sm transition-colors">学习</a>
+                        <a href="#" class="px-3 py-1 bg-slate-700/50 hover:bg-primary/20 rounded-full text-sm transition-colors">分享</a>
+                        <a href="#" class="px-3 py-1 bg-slate-700/50 hover:bg-primary/20 rounded-full text-sm transition-colors">技术</a>
+                    </div>
+                </div>
+
+                <!-- 装饰元素 -->
+                <div class="flex gap-4 flex-wrap justify-center">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 animate-bounce" style="animation-delay: 0.1s"></div>
+                    <div class="w-8 h-8 rounded-full bg-secondary/20 animate-bounce" style="animation-delay: 0.3s"></div>
+                    <div class="w-10 h-10 rounded-full bg-purple-500/20 animate-bounce" style="animation-delay: 0.5s"></div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="mt-16 text-center text-slate-500 text-sm py-6 border-t border-slate-800">
+            <p>© 2023 Smart_XP的博客 | 感谢您的支持</p>
+        </footer>
+    </div>
+
+    <!-- 交互效果脚本 -->
+    <script>
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('opacity-100');
+            document.body.classList.remove('opacity-0');
+            
+            // 检查是否有会话登录状态（使用sessionStorage，关闭页面后会自动清除）
+            checkLoginStatus();
+        });
+
+        // DOM元素
+        const loginTab = document.getElementById('loginTab');
+        const registerTab = document.getElementById('registerTab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userStatus = document.getElementById('userStatus');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const authCard = document.getElementById('authCard');
+        const followCard = document.getElementById('followCard');
+        
+        // 错误提示元素
+        const loginError = document.getElementById('loginError');
+        const regError = document.getElementById('regError');
+        const regSuccess = document.getElementById('regSuccess');
+        const userExists = document.getElementById('userExists');
+
+        // 切换登录/注册表单
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('text-primary', 'border-primary', 'border-b-2');
+            loginTab.classList.remove('text-slate-400');
+            registerTab.classList.remove('text-primary', 'border-primary', 'border-b-2');
+            registerTab.classList.add('text-slate-400');
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            
+            // 清除提示信息
+            clearAllMessages();
+        });
+
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('text-primary', 'border-primary', 'border-b-2');
+            registerTab.classList.remove('text-slate-400');
+            loginTab.classList.remove('text-primary', 'border-primary', 'border-b-2');
+            loginTab.classList.add('text-slate-400');
+            registerForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+            
+            // 清除提示信息
+            clearAllMessages();
+        });
+
+        // 登录功能
+        loginBtn.addEventListener('click', () => {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            // 从localStorage获取用户数据
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            
+            // 验证用户
+            if (users[username] && users[username] === password) {
+                // 登录成功，使用sessionStorage存储会话状态（关闭页面后自动清除）
+                sessionStorage.setItem('currentUser', username);
+                checkLoginStatus();
+                // 清空表单
+                document.getElementById('loginUsername').value = '';
+                document.getElementById('loginPassword').value = '';
+                loginError.classList.add('hidden');
+            } else {
+                loginError.classList.remove('hidden');
+            }
+        });
+
+        // 注册功能
+        registerBtn.addEventListener('click', () => {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            // 清除之前的提示
+            clearAllMessages();
+            
+            // 验证密码
+            if (password !== confirmPassword) {
+                regError.classList.remove('hidden');
+                return;
+            }
+            
+            // 获取现有用户
+            const users = JSON.parse(localStorage.getItem('users') || '{}');
+            
+            // 检查用户名是否已存在
+            if (users[username]) {
+                userExists.classList.remove('hidden');
+                return;
+            }
+            
+            // 注册新用户
+            users[username] = password;
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // 显示成功信息
+            regSuccess.classList.remove('hidden');
+            
+            // 清空表单
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regConfirmPassword').value = '';
+            
+            // 2秒后切换到登录表单
+            setTimeout(() => {
+                loginTab.click();
+            }, 2000);
+        });
+
+        // 退出登录
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('currentUser');
+            checkLoginStatus();
+        });
+
+        // 检查登录状态
+        function checkLoginStatus() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            
+            if (currentUser) {
+                // 已登录状态
+                usernameDisplay.textContent = currentUser;
+                userStatus.classList.remove('hidden');
+                authCard.classList.add('hidden');
+                followCard.classList.remove('hidden');
+            } else {
+                // 未登录状态
+                userStatus.classList.add('hidden');
+                authCard.classList.remove('hidden');
+                followCard.classList.add('hidden');
+            }
+        }
+
+        // 清除所有提示信息
+        function clearAllMessages() {
+            loginError.classList.add('hidden');
+            regError.classList.add('hidden');
+            regSuccess.classList.add('hidden');
+            userExists.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
